@@ -2,7 +2,10 @@
   <div id="app">
     <input type="text" v-model="postcodes">
     <button @click="serch">住所自動入力</button>
-    <p>Address:</p>
+    <h2>{{comment}}</h2>
+    <p>Address:{{allAddress}}</p>
+    <p>緯度:{{latitude}}</p>
+    <p>経度:{{longitude}}</p>
   </div>
 </template>
 
@@ -12,18 +15,28 @@ import axios from "axios";
 export default{
   data () {
     return {
-      postcodes: ""
+      comment: "郵便番号を入力してください",
+      postcodes: "",
+      allAddress: "",
+      latitude: "",
+      longitude: "",
     }
-  },
-  created () {
-    axios
-      .get(`https://apis.postcode-jp.com/api/v4/postcodes/?apiKey=IqUKWh8nGHS6vOiLFKeSXOop0cfXkvaipbqwMMq`)
-      .then(response => {
-        console.log(response)
-      });
   },
   methods: {
     serch () {
+      this.allAddress = ""
+      axios
+      .get(`https://apis.postcode-jp.com/api/v4/postcodes/${this.postcodes}?apiKey=IqUKWh8nGHS6vOiLFKeSXOop0cfXkvaipbqwMMq`)
+      .then(response => {
+        if (response.data.length > 0) {
+          this.allAddress = response.data[0].allAddress
+          this.latitude = response.data[0].location.latitude
+          this.longitude = response.data[0].location.latitude
+          this.comment = "見つかりました"
+        } else {
+          this.comment = "存在しません"
+        }
+      });
     }
   },
 };
