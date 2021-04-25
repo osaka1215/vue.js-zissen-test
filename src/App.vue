@@ -25,6 +25,9 @@ export default{
   methods: {
     serch () {
       this.allAddress = ""
+      this.latitude = ""
+      this.longitude = ""
+
       axios
       .get(`https://apis.postcode-jp.com/api/v4/postcodes/${this.postcodes}?apiKey=IqUKWh8nGHS6vOiLFKeSXOop0cfXkvaipbqwMMq`)
       .then(response => {
